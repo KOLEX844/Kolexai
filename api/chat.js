@@ -3,45 +3,54 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  const { message } = req.body;
-  const msg = message.toLowerCase();
 
-  // TRY REAL AI FIRST
   try {
-    const r = await fetch('https://ai.hackclub.com/chat/completions', {
+    const { message } = req.body;
+    if (!message) return res.status(200).json({ reply: "Oya talk to me bro!" });
+
+    // METHOD 1: HackClub - Real GPT-4o (This one worked for you before)
+    const hackClubRes = await fetch('https://ai.hackclub.com/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'openai/gpt-4o-mini',
+        messages: [
+          { role: 'system', content: 'You are KOLEX AI, built by KOLEX844 in Lagos, Nigeria. You are a helpful, friendly, intelligent AI assistant like ChatGPT. You can do homework, teach science, maths, everything. Keep answers clear and helpful.' },
+          { role: 'user', content: message }
+        ],
+        stream: false
+      })
+    });
+
+    if (hackClubRes.ok) {
+      const data = await hackClubRes.json();
+      const reply = data.choices?.[0]?.message?.content;
+      if (reply) return res.status(200).json({ reply });
+    }
+
+    // METHOD 2: Pollinations AI - Backup
+    const pollRes = await fetch('https://gen.pollinations.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
         messages: [{ role: 'user', content: message }]
       })
     });
-    const d = await r.json();
-    if (d.choices?.[0]?.message?.content) {
-      return res.status(200).json({ reply: d.choices[0].message.content });
-    }
-  } catch(e){}
-  try {
-    const r2 = await fetch('https://text.pollinations.ai/' + encodeURIComponent(message));
-    const t2 = await r2.text();
-    if (t2 && t2.length > 20 &&!t2.includes('ENOSPC')) {
-      return res.status(200).json({ reply: t2 });
-    }
-  } catch(e){}
 
-  // REAL SMART LOCAL CHATGPT BRAIN (No more echo!)
-  let reply = "";
-  if (msg.includes('homework')) {
-    reply = "Bet! Let's do your homework together 📚🔥\n\nTell me:\n1. Which subject? (Maths, English, Science?)\n2. What topic?\n3. Send the question\n\nI be KOLEX AI - I go break am down step-by-step for you, no be just answer. Oya send am!";
-  } else if (msg.includes('science')) {
-    reply = "Science? Let's go! 🔬\n\nScience get 3 main branches:\n\n**1. Physics** - how things move, light, energy\n**2. Chemistry** - atoms, reactions, matter\n**3. Biology** - living things, body, plants\n\nWhich one you want learn today? Or tell me your class topic - e.g. 'Photosynthesis' or 'Newton's Laws' - I go teach you like real teacher!";
-  } else if (msg.includes('wassup') || msg.includes('hey') || msg.includes('hi') || msg.includes('hello')) {
-    reply = "Wassup my G! 😎 KOLEX AI active for Lagos! I'm your personal ChatGPT. I fit:\n\n✅ Do homework (any subject)\n✅ Teach you anything\n✅ Write essay, code\n✅ Gist and advise\n\nWetin you need today?";
-  } else if (msg.includes('who are you') || msg.includes('your name')) {
-    reply = "I be KOLEX AI 🔥 Built by KOLEX844 in Lagos, Nigeria. I be full AI assistant like ChatGPT - I sabi maths, science, English, coding, anything. I dey here to make you pass your exams and learn fast!";
-  } else {
-    reply = `Okay, you talk say: "${message}"\n\nI got you! 👊 As KOLEX AI, I fit help you with that.\n\nIf na question, just ask am direct - e.g. "What is photosynthesis?" or "Solve 2x + 5 = 15"\n\nIf na explanation, tell me topic. I go teach am wella!`;
+    if (pollRes.ok) {
+      const data2 = await pollRes.json();
+      const reply2 = data2.choices?.[0]?.message?.content;
+      if (reply2) return res.status(200).json({ reply: reply2 });
+    }
+
+    throw new Error("AI down");
+
+  } catch (err) {
+    // If both fail, still give smart answer, not that stupid echo
+    const m = req.body?.message || "";
+    return res.status(200).json({
+      reply: `My main brain dey restart (servers busy). But I still got you!\n\nYou said: "${m}"\n\nIf na homework, send the full question. If na science, tell me the topic like "photosynthesis" or "gravity" - I go teach you now! - KOLEX AI 🇳🇬`
+    });
   }
-
-  return res.status(200).json({ reply });
-                              }
+  }
