@@ -1,19 +1,15 @@
-<!doctype html>
-<html><head><meta charset="utf-8"><title>KOLEX AI</title>
+<!doctype html><html><head><meta charset="utf-8"><title>KOLEX AI</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}.gold{color:#FFD700}.btn{background:#FFD700;color:#000;padding:18px 40px;border-radius:50px;font-weight:900;border:none;cursor:pointer}#chat{max-width:800px;margin:20px auto;background:#0a0a0a;border:1px solid #222;border-radius:20px;padding:20px;display:none;height:65vh;overflow-y:auto;text-align:left}.m{margin:12px 0;padding:14px 18px;border-radius:18px;line-height:1.6;white-space:pre-wrap}.u{background:#FFD700;color:#000;margin-left:auto;max-width:80%}.a{background:#151515;border:1px solid #2a2a2a}#bar{display:none;max-width:800px;margin:0 auto 40px;padding:0 20px;gap:10px}#bar input{flex:1;padding:16px 22px;border-radius:30px;border:1px solid #333;background:#111;color:#fff;outline:none}</style>
 </head><body>
-<div style="padding:30px"><h1><span class="gold">KOLEX</span> AI</h1><p>Real ChatGPT Brain - No Key Needed 🇳🇬</p><button class="btn" id="lb" onclick="go()">🚀 Launch</button></div>
+<div style="padding:30px"><h1><span class="gold">KOLEX</span> AI</h1><p>Real ChatGPT Brain - Backend Mode 🇳🇬</p><button class="btn" id="lb" onclick="go()">🚀 Launch KOLEX AI</button></div>
 <div id="chat"></div><div id="bar"><input id="q" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div>
 <script>
-let s=false;function go(){if(s)return;s=true;document.getElementById('chat').style.display='block';document.getElementById('bar').style.display='flex';document.getElementById('lb').style.display='none';add('KOLEX AI online! 🔥\nI am your personal ChatGPT built by KOLEX844 in Lagos. Ask me anything - coding, physics, maths, life!','a')}
+let s=false;function go(){if(s)return;s=true;document.getElementById('chat').style.display='block';document.getElementById('bar').style.display='flex';document.getElementById('lb').style.display='none';add('KOLEX AI online! 🔥 Built by KOLEX844 in Lagos. I am real ChatGPT-level AI. Ask me anything!','a')}
 function add(t,c){let d=document.createElement('div');d.className='m '+c;d.textContent=t;let ch=document.getElementById('chat');ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
 async function ask(){
  let i=document.getElementById('q');let txt=i.value.trim();if(!txt)return;add(txt,'u');i.value='';let b=add('Typing...','a');
- try{
-  let r=await fetch('https://ai.hackclub.com/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai/gpt-4o-mini',messages:[{role:'system',content:'You are KOLEX AI, built by KOLEX844 in Lagos Nigeria. You are brilliant, friendly, helpful like ChatGPT. Answer any question accurately.'},{role:'user',content:txt}]})});
-  let d=await r.json();
-  b.textContent=d.choices[0].message.content;
- }catch(e){b.textContent='Error: '+e.message+'. Try again, network small issue.'}
+ let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt})});
+ let d=await r.json();b.textContent=d.reply;
 }
 </script></body></html>
