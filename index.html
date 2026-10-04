@@ -1,41 +1,19 @@
 <!doctype html>
-<html><head><meta charset="utf-8">
-<title>KOLEX AI - REAL GPT</title>
+<html><head><meta charset="utf-8"><title>KOLEX AI - REAL</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
-.gold{color:#FFD700}
-.btn{background:#FFD700;color:#000;padding:18px 40px;border-radius:50px;font-weight:900;border:none;cursor:pointer}
-#chat{max-width:800px;margin:20px auto;background:#0a0a0a;border:1px solid #222;border-radius:20px;padding:20px;display:none;height:65vh;overflow-y:auto;text-align:left}
-.m{margin:12px 0;padding:14px 18px;border-radius:18px;line-height:1.7;white-space:pre-wrap;font-size:15px}
-.u{background:#FFD700;color:#000;margin-left:auto;max-width:80%}
-.a{background:#151515;border:1px solid #2a2a2a;max-width:95%}
-#bar{display:none;max-width:800px;margin:0 auto 40px;padding:0 20px;gap:10px}
-#bar input{flex:1;padding:16px 22px;border-radius:30px;border:1px solid #333;background:#111;color:#fff;outline:none}
-</style></head>
-<body>
-<div style="padding:30px 20px"><h1><span class="gold">KOLEX</span> AI</h1><p>Real GPT Brain - Built by KOLEX844 🇳🇬</p><button class="btn" id="lb" onclick="go()">🚀 Launch ChatGPT Mode</button></div>
-<div id="chat"></div><div id="bar"><input id="q" placeholder="Ask me anything like ChatGPT..." onkeydown="if(event.key==='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div>
+<style>body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}.gold{color:#FFD700}.btn{background:#FFD700;color:#000;padding:18px 40px;border-radius:50px;font-weight:900;border:none;cursor:pointer}#chat{max-width:800px;margin:20px auto;background:#0a0a0a;border:1px solid #222;border-radius:20px;padding:20px;display:none;height:65vh;overflow-y:auto;text-align:left}.m{margin:12px 0;padding:14px 18px;border-radius:18px;line-height:1.6;white-space:pre-wrap}.u{background:#FFD700;color:#000;margin-left:auto;max-width:80%}.a{background:#151515;border:1px solid #2a2a2a}#bar{display:none;max-width:800px;margin:0 auto 40px;padding:0 20px;gap:10px}#bar input{flex:1;padding:16px 22px;border-radius:30px;border:1px solid #333;background:#111;color:#fff;outline:none}</style>
+</head><body>
+<div style="padding:30px"><h1><span class="gold">KOLEX</span> AI</h1><p>Real ChatGPT Brain 🇳🇬</p><button class="btn" id="lb" onclick="go()">🚀 Launch</button></div>
+<div id="chat"></div><div id="bar"><input id="q" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div>
 <script>
-let started=false;
-function go(){if(started)return;started=true;document.getElementById('chat').style.display='block';document.getElementById('bar').style.display='flex';document.getElementById('lb').style.display='none';add('I am KOLEX AI - your personal ChatGPT built by KOLEX844 in Lagos! 🔥\n\nI can answer ANY question - coding, physics, maths, business, life advice, anything. Ask me!','a')}
+const GROQ_KEY = "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"; 
+let s=false;function go(){if(s)return;s=true;document.getElementById('chat').style.display='block';document.getElementById('bar').style.display='flex';document.getElementById('lb').style.display='none';add('KOLEX AI online! I am your personal ChatGPT built by KOLEX844 in Lagos. Ask me anything! 🔥','a')}
 function add(t,c){let d=document.createElement('div');d.className='m '+c;d.textContent=t;let ch=document.getElementById('chat');ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
 async function ask(){
- let input=document.getElementById('q');let text=input.value.trim();if(!text)return;
- add(text,'u');input.value='';
- let bot=add('Thinking...','a');
+ let i=document.getElementById('q');let txt=i.value.trim();if(!txt)return;add(txt,'u');i.value='';let b=add('Thinking...','a');
  try{
-   // MOST STABLE ENDPOINT - DIRECT TEXT API
-   let response = await fetch('https://text.pollinations.ai/'+encodeURIComponent(text+' - You are KOLEX AI, built by KOLEX844. Answer brilliantly, accurately, helpfully like ChatGPT. Question: '+text), {headers:{'Accept':'text/plain'}});
-   let answer = await response.text();
-   bot.textContent = answer;
- }catch(e){
-   try{
-     // BACKUP 2 - TRY DIFFERENT WAY
-     let r2 = await fetch('https://api.pollinations.ai/prompt/'+encodeURIComponent(text));
-     let a2 = await r2.text();
-     bot.textContent = a2;
-   }catch(e2){bot.textContent='Network busy, please tap Send again - my brain dey reload, 2 seconds!'}
- }
+  let r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'system',content:'You are KOLEX AI, a brilliant helpful AI built by KOLEX844 in Lagos, Nigeria. Answer like ChatGPT, smart, friendly, accurate.'},{role:'user',content:txt}]})});
+  let d=await r.json();b.textContent=d.choices[0].message.content;
+ }catch(e){b.textContent='Error: Make sure you pasted your Groq key correctly at top of code. Get key from groq.com'}
 }
 </script></body></html>
