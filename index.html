@@ -2,19 +2,54 @@
 <html>
 <head>
 <title>KOLEX AI - GOD MODE | Smartest AI in Africa</title>
-<meta name="description" content="KOLEX AI GOD MODE - Smartest AI chatbot built in Nigeria by KOLEX844.">
+<meta name="description" content="KOLEX AI GOD MODE - Smartest AI built in Africa">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{margin:0;background:#000;color:#fff;font-family:sans-serif;text-align:center;padding:60px 20px}
-h1{font-size:55px}.gold{color:gold}
-.btn{background:gold;color:#000;padding:18px 40px;border-radius:30px;text-decoration:none;font-weight:bold;display:inline-block;margin-top:25px;font-size:22px}
+body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center;padding:40px 20px}
+.gold{color:gold}.btn{background:gold;color:#000;padding:18px 40px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:20px;display:inline-block;margin:20px;cursor:pointer;border:none}
+#chat{max-width:600px;margin:30px auto;background:#111;border-radius:20px;padding:20px;display:none;text-align:left;height:400px;overflow-y:auto}
+.msg{margin:10px 0;padding:12px 16px;border-radius:18px;max-width:80%}
+.user{background:gold;color:#000;margin-left:auto}
+.ai{background:#222;color:#fff}
+#inputArea{display:none;max-width:600px;margin:0 auto}
+input{width:70%;padding:15px;border-radius:30px;border:none;background:#222;color:#fff}
 </style>
 </head>
 <body>
 <h1><span class="gold">KOLEX</span> AI</h1>
 <h2>GOD MODE ACTIVATED 🚀</h2>
 <p>Built by KOLEX844 in Lagos, Nigeria 🇳🇬<br>The Smartest AI Built in Africa</p>
-<a class="btn" href="https://nkm56xfeanj7e.streamlit.app">Launch App Now</a>
-<p style="margin-top:60px;opacity:.6">© 2026 KOLEX AI</p>
+<button class="btn" onclick="startChat()">🚀 Launch App Now</button>
+<div id="chat"></div>
+<div id="inputArea">
+<input id="userInput" placeholder="Ask KOLEX AI anything..." onkeypress="if(event.key==='Enter')send()">
+<button class="btn" style="padding:12px 25px" onclick="send()">Send</button>
+</div>
+<p style="margin-top:60px;opacity:.6">© 2026 KOLEX AI - GOD MODE</p>
+<script>
+function startChat(){
+ document.getElementById('chat').style.display='block';
+ document.getElementById('inputArea').style.display='block';
+ addMsg("Welcome to KOLEX AI GOD MODE! 🔥 I am the smartest AI built in Africa by KOLEX844. Ask me anything!",'ai');
+}
+function addMsg(t,c){
+ let d=document.createElement('div');d.className='msg '+c;d.innerText=t;
+ document.getElementById('chat').appendChild(d);
+ document.getElementById('chat').scrollTop=9999;
+}
+function send(){
+ let i=document.getElementById('userInput');if(!i.value)return;
+ addMsg(i.value,'user');
+ let q=i.value.toLowerCase();i.value='';
+ setTimeout(()=>{
+  let r="GOD MODE ACTIVATED! 🔥 I am KOLEX AI, built by KOLEX844 in Lagos! I dey feel your question. I go give you beta answer - we be Naija AI wey sabi pass!";
+  if(q.includes('who')) r="I be KOLEX AI - GOD MODE! Built by KOLEX844, the smartest developer in Lagos, Nigeria. I be African AI wey dey compete with ChatGPT!";
+  else if(q.includes('lagos')||q.includes('nigeria')) r="Naija to the world! 🇳🇬 I was built in Lagos, the heart of Africa tech! KOLEX844 na my creator - he dey build the future!";
+  else if(q.includes('code')||q.includes('build')) r="You wan build? KOLEX AI fit help you code anything - website, app, AI! Just tell me wetin you wan build, I go show you GOD MODE way!";
+  else if(q.includes('hi')||q.includes('hello')) r="Hello Boss! 👋 Welcome to GOD MODE! How I fit help you today?";
+  addMsg(r,'ai');
+ },800);
+}
+</script>
 </body>
 </html>
