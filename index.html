@@ -6,7 +6,7 @@
 <div style="padding:30px"><h1><span class="gold">KOLEX</span> AI</h1><p>Real ChatGPT Brain 🇳🇬</p><button class="btn" id="lb" onclick="go()">🚀 Launch</button></div>
 <div id="chat"></div><div id="bar"><input id="q" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div>
 <script>
-const GROQ_KEY = "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"; 
+const GROQ_KEY = "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"; // <-- PASTE YOUR KEY HERE
 let s=false;function go(){if(s)return;s=true;document.getElementById('chat').style.display='block';document.getElementById('bar').style.display='flex';document.getElementById('lb').style.display='none';add('KOLEX AI online! I am your personal ChatGPT built by KOLEX844 in Lagos. Ask me anything! 🔥','a')}
 function add(t,c){let d=document.createElement('div');d.className='m '+c;d.textContent=t;let ch=document.getElementById('chat');ch.appendChild(d);ch.scrollTop=ch.scrollHeight;return d}
 async function ask(){
